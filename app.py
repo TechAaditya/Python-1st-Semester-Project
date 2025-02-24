@@ -3,12 +3,6 @@ import numpy as np
 import pandas as pd
 import joblib
 
-# -----------------------------------------------------------------------------
-
-# THEMES AND STYLING
-# -----------------------------------------------------------------------------
-# Dropdown for theme selection
-theme = st.sidebar.selectbox("Select Theme", ["Default", "Light", "Dark"])
 
 # TITLE & IMAGE
 # -----------------------------------------------------------------------------
