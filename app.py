@@ -4,6 +4,37 @@ import pandas as pd
 import joblib
 
 # -----------------------------------------------------------------------------
+
+# THEMES AND STYLING
+# -----------------------------------------------------------------------------
+# Dropdown for theme selection
+theme = st.sidebar.selectbox("Select Theme", ["Default", "Light", "Dark"])
+
+# Apply CSS for themes dynamically
+if theme == "Light":
+    st.markdown(
+        """
+        <style>
+        body {
+            background-color: #f5f5f5;
+            color: #333333;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+elif theme == "Dark":
+    st.markdown(
+        """
+        <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 # TITLE & IMAGE
 # -----------------------------------------------------------------------------
 st.title("AQI Prediction App")
