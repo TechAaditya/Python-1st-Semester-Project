@@ -1,44 +1,104 @@
 import streamlit as st
+import numpy as np
 import pandas as pd
 import joblib
 
-# Load the saved model
-loaded_model = joblib.load("aqi_prediction_model.pkl")
+# -----------------------------------------------------------------------------
+# TITLE & DESCRIPTION
+# -----------------------------------------------------------------------------
+st.title("AQI Prediction App with Random Value Generator")
+st.write("This app predicts the Air Quality Index (AQI) based on input values for "
+         "pollutants and meteorological parameters. You can also generate random values "
+         "for these parameters within defined ranges.")
 
-# Title of the app
-st.title("AQI Prediction App")
+# -----------------------------------------------------------------------------
+# DEFINE PARAMETER RANGES (adjust these based on your data/criteria)
+# -----------------------------------------------------------------------------
+pm25_range = (0, 500)      # PM2.5, in µg/m³
+pm10_range = (0, 600)      # PM10, in µg/m³
+no2_range = (0, 100)       # NO₂, in ppb
+co_range = (0, 20)         # CO, in ppm
+so2_range = (0, 50)        # SO₂, in ppb
+o3_range = (0, 150)        # O₃, in ppb
+tavg_range = (0, 40)       # Average Temperature in °C
+rh_range = (0, 100)        # Relative Humidity in %
+wspd_range = (0, 15)       # Wind Speed in m/s
 
-# Instructions for users
-st.write("Enter values for the independent variables below to predict AQI.")
+# -----------------------------------------------------------------------------
+# INITIALIZE SESSION STATE FOR EACH PARAMETER
+# -----------------------------------------------------------------------------
+if 'pm25' not in st.session_state:
+    st.session_state['pm25'] = 100.0
+if 'pm10' not in st.session_state:
+    st.session_state['pm10'] = 100.0
+if 'NO2' not in st.session_state:
+    st.session_state['NO2'] = 30.0
+if 'CO' not in st.session_state:
+    st.session_state['CO'] = 5.0
+if 'SO2' not in st.session_state:
+    st.session_state['SO2'] = 5.0
+if 'O3' not in st.session_state:
+    st.session_state['O3'] = 30.0
+if 'tavg' not in st.session_state:
+    st.session_state['tavg'] = 15.0
+if 'rh' not in st.session_state:
+    st.session_state['rh'] = 50.0
+if 'wspd' not in st.session_state:
+    st.session_state['wspd'] = 5.0
 
-# Input fields for independent variables
-pm25 = st.number_input("PM2.5 (µg/m³)", min_value=0.0, step=0.1)
-pm10 = st.number_input("PM10 (µg/m³)", min_value=0.0, step=0.1)
-no2 = st.number_input("NO₂ (ppb)", min_value=0.0, step=0.1)
-co = st.number_input("CO (ppm)", min_value=0.0, step=0.1)
-so2 = st.number_input("SO₂ (ppb)", min_value=0.0, step=0.1)
-o3 = st.number_input("O₃ (ppb)", min_value=0.0, step=0.1)
-tavg = st.number_input("Average Temperature (°C)", step=0.1)
-rh = st.number_input("Relative Humidity (%)", min_value=0.0, max_value=100.0, step=1.0)
-wspd = st.number_input("Wind Speed (m/s)", min_value=0.0, step=0.1)
+# -----------------------------------------------------------------------------
+# FUNCTION TO GENERATE RANDOM VALUES FOR PARAMETERS
+# -----------------------------------------------------------------------------
+def generate_random_values():
+    st.session_state['pm25'] = np.random.uniform(*pm25_range)
+    st.session_state['pm10'] = np.random.uniform(*pm10_range)
+    st.session_state['NO2'] = np.random.uniform(*no2_range)
+    st.session_state['CO'] = np.random.uniform(*co_range)
+    st.session_state['SO2'] = np.random.uniform(*so2_range)
+    st.session_state['O3'] = np.random.uniform(*o3_range)
+    st.session_state['tavg'] = np.random.uniform(*tavg_range)
+    st.session_state['rh'] = np.random.uniform(*rh_range)
+    st.session_state['wspd'] = np.random.uniform(*wspd_range)
 
-# Button to make predictions
+# Button to trigger random value generation
+if st.button("Generate Random Values"):
+    generate_random_values()
+
+# -----------------------------------------------------------------------------
+# INPUT FIELDS FOR THE PARAMETERS (populated with session state values)
+# -----------------------------------------------------------------------------
+pm25_val = st.number_input("PM2.5 (µg/m³)", value=float(st.session_state['pm25']))
+pm10_val = st.number_input("PM10 (µg/m³)", value=float(st.session_state['pm10']))
+no2_val = st.number_input("NO₂ (ppb)", value=float(st.session_state['NO2']))
+co_val = st.number_input("CO (ppm)", value=float(st.session_state['CO']))
+so2_val = st.number_input("SO₂ (ppb)", value=float(st.session_state['SO2']))
+o3_val = st.number_input("O₃ (ppb)", value=float(st.session_state['O3']))
+tavg_val = st.number_input("Average Temperature (°C)", value=float(st.session_state['tavg']))
+rh_val = st.number_input("Relative Humidity (%)", value=float(st.session_state['rh']))
+wspd_val = st.number_input("Wind Speed (m/s)", value=float(st.session_state['wspd']))
+
+# -----------------------------------------------------------------------------
+# PREDICTION FUNCTIONALITY
+# -----------------------------------------------------------------------------
 if st.button("Predict AQI"):
-    # Create a DataFrame for the input data
+    # Create a DataFrame from the input values
     input_data = pd.DataFrame({
-        "PM2.5": [pm25],
-        "PM10": [pm10],
-        "NO2": [no2],
-        "CO": [co],
-        "SO2": [so2],
-        "O3": [o3],
-        "tavg": [tavg],
-        "rh": [rh],
-        "wspd": [wspd]
+        "PM2.5": [pm25_val],
+        "PM10": [pm10_val],
+        "NO2": [no2_val],
+        "CO": [co_val],
+        "SO2": [so2_val],
+        "O3": [o3_val],
+        "tavg": [tavg_val],
+        "rh": [rh_val],
+        "wspd": [wspd_val]
     })
-
-    # Make prediction using the loaded model
-    predicted_aqi = loaded_model.predict(input_data)
-
-    # Display the prediction
-    st.success(f"Predicted AQI: {predicted_aqi[0]:.2f}")
+    
+    # Load the pre-trained AQI prediction model
+    loaded_model = joblib.load("aqi_prediction_model.pkl")
+    
+    # Make the prediction
+    prediction = loaded_model.predict(input_data)
+    
+    # Display the prediction result
+    st.success(f"Predicted AQI: {prediction[0]:.2f}")
