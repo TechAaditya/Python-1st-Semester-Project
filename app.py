@@ -108,8 +108,6 @@ if st.button("Predict AQI"):
         "wspd": [wspd_val]
     })
 
-    # Display AQI scale image
-    st.image("aqi_scale_image.jpg", caption="Air Quality Index Scale", use_container_width=True)
 
     # Load the pre-trained AQI prediction model
     loaded_model = joblib.load("aqi_prediction_model.pkl")
@@ -123,3 +121,6 @@ if st.button("Predict AQI"):
     # Display the prediction result and category
     st.success(f"Predicted AQI: {prediction:.2f}")
     st.info(f"AQI Category: {aqi_category}")
+    
+    # Display AQI scale image
+    st.image("aqi_scale_image.jpg", caption="Air Quality Index Scale", use_container_width=True)
