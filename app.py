@@ -4,12 +4,13 @@ import pandas as pd
 import joblib
 
 # -----------------------------------------------------------------------------
-# TITLE & DESCRIPTION
+# TITLE & IMAGE
 # -----------------------------------------------------------------------------
 st.title("AQI Prediction App")
-st.write("This app predicts the Air Quality Index (AQI) based on input values for "
-         "pollutants and meteorological parameters. You can also generate random values "
-         "for these parameters within defined ranges.")
+st.write("This app predicts the Air Quality Index (AQI) based on input values for pollutants and meteorological parameters.")
+
+# Display AQI scale image
+st.image("aqi_scale_image.jpg", caption="Air Quality Index Scale", use_column_width=True)
 
 # -----------------------------------------------------------------------------
 # DEFINE PARAMETER RANGES (adjust these based on your data/criteria)
@@ -78,6 +79,23 @@ rh_val = st.number_input("Relative Humidity (%)", value=float(st.session_state['
 wspd_val = st.number_input("Wind Speed (m/s)", value=float(st.session_state['wspd']))
 
 # -----------------------------------------------------------------------------
+# FUNCTION TO DETERMINE AQI CATEGORY BASED ON PREDICTED VALUE
+# -----------------------------------------------------------------------------
+def get_aqi_category(aqi):
+    if aqi <= 50:
+        return "Good"
+    elif aqi <= 100:
+        return "Moderate"
+    elif aqi <= 150:
+        return "Unhealthy for Sensitive Groups"
+    elif aqi <= 200:
+        return "Unhealthy"
+    elif aqi <= 300:
+        return "Very Unhealthy"
+    else:
+        return "Hazardous"
+
+# -----------------------------------------------------------------------------
 # PREDICTION FUNCTIONALITY
 # -----------------------------------------------------------------------------
 if st.button("Predict AQI"):
@@ -98,7 +116,11 @@ if st.button("Predict AQI"):
     loaded_model = joblib.load("aqi_prediction_model.pkl")
     
     # Make the prediction
-    prediction = loaded_model.predict(input_data)
+    prediction = loaded_model.predict(input_data)[0]
     
-    # Display the prediction result
-    st.success(f"Predicted AQI: {prediction[0]:.2f}")
+    # Determine AQI category based on prediction
+    aqi_category = get_aqi_category(prediction)
+    
+    # Display the prediction result and category
+    st.success(f"Predicted AQI: {prediction:.2f}")
+    st.info(f"AQI Category: {aqi_category}")
