@@ -14,9 +14,7 @@ st.title("AQI Prediction App")
 # Instructions for users
 st.write("Enter values for the independent variables below to predict AQI.")
 
-# Button to trigger random value generation
-if st.button("Generate Random Values"):
-    generate_random_values()
+
 
 # Define ranges for each parameter (customize these based on your data criteria)
 pm25_range = (0, 500)      # PM2.5 in µg/m³
@@ -61,8 +59,9 @@ def generate_random_values():
     st.session_state['tavg'] = np.random.uniform(*tavg_range)
     st.session_state['rh'] = np.random.uniform(*rh_range)
     st.session_state['wspd'] = np.random.uniform(*wspd_range)
-
-
+# Button to trigger random value generation
+if st.button("Generate Random Values"):
+    generate_random_values()
 
 # Input fields for independent variables
 pm25 = st.number_input("PM2.5 (µg/m³)", min_value=0.0, step=0.1)
