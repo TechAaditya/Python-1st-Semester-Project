@@ -8,10 +8,6 @@ import joblib
 # -----------------------------------------------------------------------------
 st.title("AQI Prediction App")
 st.write("This app predicts the Air Quality Index (AQI) based on input values for pollutants and meteorological parameters.")
-
-# Display AQI scale image
-st.image("aqi_scale_image.jpg", caption="Air Quality Index Scale", use_column_width=True)
-
 # -----------------------------------------------------------------------------
 # DEFINE PARAMETER RANGES (adjust these based on your data/criteria)
 # -----------------------------------------------------------------------------
@@ -111,7 +107,10 @@ if st.button("Predict AQI"):
         "rh": [rh_val],
         "wspd": [wspd_val]
     })
-    
+
+    # Display AQI scale image
+    st.image("aqi_scale_image.jpg", caption="Air Quality Index Scale", use_container_width=True)
+
     # Load the pre-trained AQI prediction model
     loaded_model = joblib.load("aqi_prediction_model.pkl")
     
