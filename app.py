@@ -7,6 +7,16 @@ import numpy as np
 # Load the saved model
 loaded_model = joblib.load("aqi_prediction_model.pkl")
 
+# Title of the app
+st.title("AQI Prediction App")
+
+
+# Instructions for users
+st.write("Enter values for the independent variables below to predict AQI.")
+
+# Button to trigger random value generation
+if st.button("Generate Random Values"):
+    generate_random_values()
 
 # Define ranges for each parameter (customize these based on your data criteria)
 pm25_range = (0, 500)      # PM2.5 in µg/m³
@@ -40,7 +50,6 @@ if 'wspd' not in st.session_state:
     st.session_state['wspd'] = 5.0
 
 
-
 # Function to generate random values for all features based on defined ranges
 def generate_random_values():
     st.session_state['pm25'] = np.random.uniform(*pm25_range)
@@ -53,31 +62,6 @@ def generate_random_values():
     st.session_state['rh'] = np.random.uniform(*rh_range)
     st.session_state['wspd'] = np.random.uniform(*wspd_range)
 
-# Button to trigger random value generation
-if st.button("Generate Random Values"):
-    generate_random_values()
-
-# (Your prediction code here can use the above values to compute AQI)
-# Title of the app
-st.title("AQI Prediction App")
-
-# Instructions for users
-st.write("Enter values for the independent variables below to predict AQI.")
-
-# Button to make predictions
-if st.button("Predict AQI"):
-    # Create a DataFrame for the input data
-    input_data = pd.DataFrame({
-        "PM2.5": [pm25],
-        "PM10": [pm10],
-        "NO2": [no2],
-        "CO": [co],
-        "SO2": [so2],
-        "O3": [o3],
-        "tavg": [tavg],
-        "rh": [rh],
-        "wspd": [wspd]
-    })
 
     # Make prediction using the loaded model
     predicted_aqi = loaded_model.predict(input_data)
