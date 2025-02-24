@@ -57,34 +57,12 @@ def generate_random_values():
 if st.button("Generate Random Values"):
     generate_random_values()
 
-# Create number input fields that use the session state values
-pm25_val = st.number_input("PM2.5 (µg/m³)", value=st.session_state['pm25'])
-pm10_val = st.number_input("PM10 (µg/m³)", value=st.session_state['pm10'])
-no2_val = st.number_input("NO₂ (ppb)", value=st.session_state['NO2'])
-co_val = st.number_input("CO (ppm)", value=st.session_state['CO'])
-so2_val = st.number_input("SO₂ (ppb)", value=st.session_state['SO2'])
-o3_val = st.number_input("O₃ (ppb)", value=st.session_state['O3'])
-tavg_val = st.number_input("Average Temperature (°C)", value=st.session_state['tavg'])
-rh_val = st.number_input("Relative Humidity (%)", value=st.session_state['rh'])
-wspd_val = st.number_input("Wind Speed (m/s)", value=st.session_state['wspd'])
-
 # (Your prediction code here can use the above values to compute AQI)
 # Title of the app
 st.title("AQI Prediction App")
 
 # Instructions for users
 st.write("Enter values for the independent variables below to predict AQI.")
-
-# Input fields for independent variables
-pm25 = st.number_input("PM2.5 (µg/m³)", min_value=0.0, step=0.1)
-pm10 = st.number_input("PM10 (µg/m³)", min_value=0.0, step=0.1)
-no2 = st.number_input("NO₂ (ppb)", min_value=0.0, step=0.1)
-co = st.number_input("CO (ppm)", min_value=0.0, step=0.1)
-so2 = st.number_input("SO₂ (ppb)", min_value=0.0, step=0.1)
-o3 = st.number_input("O₃ (ppb)", min_value=0.0, step=0.1)
-tavg = st.number_input("Average Temperature (°C)", step=0.1)
-rh = st.number_input("Relative Humidity (%)", min_value=0.0, max_value=100.0, step=1.0)
-wspd = st.number_input("Wind Speed (m/s)", min_value=0.0, step=0.1)
 
 # Button to make predictions
 if st.button("Predict AQI"):
