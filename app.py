@@ -6,7 +6,7 @@ import joblib
 # -----------------------------------------------------------------------------
 # TITLE & DESCRIPTION
 # -----------------------------------------------------------------------------
-st.title("AQI Prediction App with Random Value Generator")
+st.title("AQI Prediction App")
 st.write("This app predicts the Air Quality Index (AQI) based on input values for "
          "pollutants and meteorological parameters. You can also generate random values "
          "for these parameters within defined ranges.")
